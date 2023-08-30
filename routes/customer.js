@@ -1,13 +1,13 @@
 let express = require('express')
 const router = express.Router()
-const Product = require('../models/Product')
+const Customer = require('../models/Customer')
 
 router.get('/', (req, res) => {
-    Product.find({})
+    Customer.find({})
         .then((data) => {
             res.json({
                 success: true,
-                message: 'Product list fetched successfully',
+                message: 'Customer list fetched successfully',
                 data
             })
         })
@@ -17,11 +17,11 @@ router.get('/', (req, res) => {
 })
 
 router.get('/:id', (req, res) => {
-    Product.findById(req.params.id)
+    Customer.findById(req.params.id)
         .then((data) => {
             res.json({
                 success: true,
-                message: 'Product Detail Feched Successfully',
+                message: 'Customer Detail Feched Successfully',
                 data
             })
         })
@@ -32,11 +32,11 @@ router.get('/:id', (req, res) => {
 
 router.post('/', (req, res) => {
     let data = req.body
-    Product.create(data)
+    Customer.create(data)
         .then(() => {
             res.json({
                 success: true,
-                message: 'Product Created Successfully',
+                message: 'Customer Created Successfully',
                 data
             })
         })
@@ -52,11 +52,11 @@ router.post('/', (req, res) => {
 router.put('/:id', (req, res) => {
     let data = req.body
     let id = req.params.id
-    Product.findByIdAndUpdate(id, data)
+    Customer.findByIdAndUpdate(id, data)
     .then(((data) => {
         res.json({
             success: true,
-            message: 'Product updated successfully',
+            message: 'Customer updated successfully',
             data: {}
         })
     }))
