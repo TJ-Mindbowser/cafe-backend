@@ -1,16 +1,16 @@
 const Category = require('../models/Category')
 
+/**
+ * API to fetch categories
+ * @returns 
+ */
 const getCategories = () => {
     return Category.find({})
         .then((data) => {
-            res.json({
-                success: true,
-                message: 'Category list fetched successfully',
-                data
-            })
+            return data
         })
         .catch((e) => {
-            console.log('error-----------', e)
+            throw new Error(e)
         })
 }
 
