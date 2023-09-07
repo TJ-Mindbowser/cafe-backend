@@ -3,6 +3,7 @@ const app = express()
 const bodyParser = require('body-parser')
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: true }))
+app.use(cors())
 
 require('./models')
 const { config } = require('./config')
@@ -15,7 +16,9 @@ const category = require('./routes/category')
 app.use('/product',product)
 app.use('/customer',customer)
 app.use('/order',order)
-app.use('/category',category)
+app.use('/category',category,(e)=>{
+  console.log(e)
+})
 
 app.listen(PORT, () => {
   console.log(`App listening on port ${PORT}`)
