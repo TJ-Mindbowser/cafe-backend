@@ -1,9 +1,11 @@
 let express = require('express')
 const router = express.Router()
-const Category = require('../models/Category')
-const { getCategories } = require('../controller/Category')
+const { getCategories,
+    getCategoryById,
+    addCategory,
+    updateCategory } = require('../controller/Category')
 
-router.get('/', async (req, res,next) => {
+router.get('/', async (req, res, next) => {
     try {
         let response = await getCategories()
         res.json({
@@ -16,58 +18,47 @@ router.get('/', async (req, res,next) => {
     }
 })
 
-router.get('/:id', (req, res) => {
-    Category.findById(req.params.id)
-        .then((data) => {
-            res.json({
-                success: true,
-                message: 'Category Detail Feched Successfully',
-                data
-            })
+router.get('/:id', async (req, res) => {
+    try {
+        let response = await getCategoryById(req.params.id)
+        res.json({
+            success: true,
+            data: response,
+            message: 'Category Fetched successfully'
         })
-        .catch((e) => {
-            console.log('error-----------', e)
-        })
+    } catch (error) {
+        console.log("🚀 ~ file: category.js:10 ~ router.get ~ error:", error)
+    }
+
 })
 
-router.post('/', (req, res) => {
-    let data = req.body
-    Category.create(data)
-        .then(() => {
-            res.json({
-                success: true,
-                message: 'Category Created Successfully',
-                data
-            })
+router.post('/', async (req, res) => {
+    try {
+        let data = req.body
+        let response = await addCategory(data)
+        res.json({
+            success: true,
+            data: response,
+            message: 'Category Added successfully'
         })
-        .catch((e) => {
-            res.json({
-                success: false,
-                message: e,
-                data: {}
-            })
-        })
+    } catch (error) {
+        console.log("🚀 ~ file: category.js:10 ~ router.get ~ error:", error)
+    }
 })
 
-router.put('/:id', (req, res) => {
-    let data = req.body
-    let id = req.params.id
-    Category.findByIdAndUpdate(id, data)
-        .then(((data) => {
-            res.json({
-                success: true,
-                message: 'Category updated successfully',
-                data: {}
-            })
-        }))
-        .catch((e) => {
-            res.json({
-                success: false,
-                message: e,
-                data: {}
-            })
+router.put('/:id', async (req, res) => {
+    try {
+        let data = req.body
+        let id = req.params.id
+        let response = await updateCategory(id, data)
+        res.json({
+            success: true,
+            message: 'Category updated successfully',
+            data: {}
         })
+    } catch (error) {
+        console.log("🚀 ~ file: category.js:58 ~ router.get ~ error:", error)
+    }
 })
 
 module.exports = router
-

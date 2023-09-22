@@ -1,73 +1,64 @@
 let express = require('express')
 const router = express.Router()
-const Product = require('../models/Product')
+const { getProducts,
+    getProductById,
+    addProduct,
+    updateProduct } = require('../controller/Product')
 
-router.get('/', (req, res) => {
-    Product.find({})
-        .then((data) => {
-            res.json({
-                success: true,
-                message: 'Product list fetched successfully',
-                data
-            })
+router.get('/', async (req, res, next) => {
+    try {
+        let response = await getProducts()
+        res.json({
+            success: true,
+            data: response,
+            message: 'Products Fetched successfully'
         })
-        .catch((e) => {
-            console.log('error-----------', e)
-        })
+    } catch (error) {
+        console.log("🚀 ~ file: Product.js:10 ~ router.get ~ error:", error)
+    }
 })
 
-router.get('/:id', (req, res) => {
-    Product.findById(req.params.id)
-        .then((data) => {
-            res.json({
-                success: true,
-                message: 'Product Detail Feched Successfully',
-                data
-            })
+router.get('/:id', async (req, res) => {
+    try {
+        let response = await getProductById(req.params.id)
+        res.json({
+            success: true,
+            data: response,
+            message: 'Product Fetched successfully'
         })
-        .catch((e) => {
-            console.log('error-----------', e)
-        })
+    } catch (error) {
+        console.log("🚀 ~ file: Product.js:10 ~ router.get ~ error:", error)
+    }
+
 })
 
-router.post('/', (req, res) => {
-    let data = req.body
-    Product.create(data)
-        .then(() => {
-            res.json({
-                success: true,
-                message: 'Product Created Successfully',
-                data
-            })
+router.post('/', async (req, res) => {
+    try {
+        let data = req.body
+        let response = await addProduct(data)
+        res.json({
+            success: true,
+            data: response,
+            message: 'Product Added successfully'
         })
-        .catch((e) => {
-            res.json({
-                success: false,
-                message: e,
-                data: {}
-            })
-        })
+    } catch (error) {
+        console.log("🚀 ~ file: Product.js:10 ~ router.get ~ error:", error)
+    }
 })
 
-router.put('/:id', (req, res) => {
-    let data = req.body
-    let id = req.params.id
-    Product.findByIdAndUpdate(id, data)
-    .then(((data) => {
+router.put('/:id', async (req, res) => {
+    try {
+        let data = req.body
+        let id = req.params.id
+        let response = await updateProduct(id, data)
         res.json({
             success: true,
             message: 'Product updated successfully',
             data: {}
         })
-    }))
-    .catch((e)=>{
-        res.json({
-            success: false,
-            message: e,
-            data: {}
-        })
-    })
+    } catch (error) {
+        console.log("🚀 ~ file: Product.js:58 ~ router.get ~ error:", error)
+    }
 })
 
 module.exports = router
-

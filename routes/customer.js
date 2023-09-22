@@ -1,73 +1,64 @@
 let express = require('express')
 const router = express.Router()
-const Customer = require('../models/Customer')
+const { getCustomers,
+    getCustomerById,
+    addCustomer,
+    updateCustomer } = require('../controller/Customer')
 
-router.get('/', (req, res) => {
-    Customer.find({})
-        .then((data) => {
-            res.json({
-                success: true,
-                message: 'Customer list fetched successfully',
-                data
-            })
+router.get('/', async (req, res, next) => {
+    try {
+        let response = await getCustomers()
+        res.json({
+            success: true,
+            data: response,
+            message: 'Customers Fetched successfully'
         })
-        .catch((e) => {
-            console.log('error-----------', e)
-        })
+    } catch (error) {
+        console.log("🚀 ~ file: Customer.js:10 ~ router.get ~ error:", error)
+    }
 })
 
-router.get('/:id', (req, res) => {
-    Customer.findById(req.params.id)
-        .then((data) => {
-            res.json({
-                success: true,
-                message: 'Customer Detail Feched Successfully',
-                data
-            })
+router.get('/:id', async (req, res) => {
+    try {
+        let response = await getCustomerById(req.params.id)
+        res.json({
+            success: true,
+            data: response,
+            message: 'Customer Fetched successfully'
         })
-        .catch((e) => {
-            console.log('error-----------', e)
-        })
+    } catch (error) {
+        console.log("🚀 ~ file: Customer.js:10 ~ router.get ~ error:", error)
+    }
+
 })
 
-router.post('/', (req, res) => {
-    let data = req.body
-    Customer.create(data)
-        .then(() => {
-            res.json({
-                success: true,
-                message: 'Customer Created Successfully',
-                data
-            })
+router.post('/', async (req, res) => {
+    try {
+        let data = req.body
+        let response = await addCustomer(data)
+        res.json({
+            success: true,
+            data: response,
+            message: 'Customer Added successfully'
         })
-        .catch((e) => {
-            res.json({
-                success: false,
-                message: e,
-                data: {}
-            })
-        })
+    } catch (error) {
+        console.log("🚀 ~ file: Customer.js:10 ~ router.get ~ error:", error)
+    }
 })
 
-router.put('/:id', (req, res) => {
-    let data = req.body
-    let id = req.params.id
-    Customer.findByIdAndUpdate(id, data)
-    .then(((data) => {
+router.put('/:id', async (req, res) => {
+    try {
+        let data = req.body
+        let id = req.params.id
+        let response = await updateCustomer(id, data)
         res.json({
             success: true,
             message: 'Customer updated successfully',
             data: {}
         })
-    }))
-    .catch((e)=>{
-        res.json({
-            success: false,
-            message: e,
-            data: {}
-        })
-    })
+    } catch (error) {
+        console.log("🚀 ~ file: Customer.js:58 ~ router.get ~ error:", error)
+    }
 })
 
 module.exports = router
-
